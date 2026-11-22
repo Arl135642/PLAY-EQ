@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Неделя на пределе: стратегия</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;800&display=swap&subset=cyrillic">
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--tx:#111;--mu:#666;--bd:#111;--ac:#ff5a1f;--up:#1a8a4a;--dn:#d4231a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141414;--card:#1e1e1e;--tx:#f2efe8;--mu:#aaa;--bd:#f2efe8;--up:#4cd08b;--dn:#ff6b5e}}
+:root[data-theme="dark"]{--bg:#141414;--card:#1e1e1e;--tx:#f2efe8;--mu:#aaa;--bd:#f2efe8;--up:#4cd08b;--dn:#ff6b5e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--tx);font:400 16px/1.45 Rubik,system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 56px}
+h1{font:800 34px/1.05 Rubik,sans-serif;margin:6px 0 10px;text-transform:uppercase;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--ac)}
+h2{font:800 21px/1.25 Rubik,sans-serif;margin:6px 0 4px}
+small{font:500 12px Rubik,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ac)}
+.mu{color:var(--mu)}
+.ds{display:flex;gap:6px;margin-bottom:12px}
+.ds span{flex:1;text-align:center;border:2px solid var(--bd);padding:3px 0;font:500 13px Rubik,sans-serif;text-transform:uppercase}
+.ds .dn{background:var(--bd);color:var(--bg)}.ds .on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.ms{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.m{border:2px solid var(--bd);background:var(--card);padding:8px 10px}
+.m span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);display:block}
+.m b{font:800 26px Rubik,sans-serif}
+.bar{height:8px;border:1.5px solid var(--bd);margin-top:4px}
+.bar i{display:block;height:100%;background:var(--bd);transition:width .5s}
+.m.lo{border-color:var(--dn)}.m.lo b{color:var(--dn)}.m.lo .bar i{background:var(--dn)}
+@media(max-width:460px){.ms{grid-template-columns:1fr 1fr}}
+.card{border:2px solid var(--bd);background:var(--card);padding:18px;box-shadow:5px 5px 0 var(--bd)}
+.op{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:500 15px Rubik,sans-serif;color:var(--tx);background:var(--card);border:2px solid var(--bd);padding:12px 14px;margin-top:10px;cursor:pointer;box-shadow:3px 3px 0 var(--bd);transition:transform .1s,box-shadow .1s}
+.op:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ac)}
+.op:disabled{opacity:.35;cursor:not-allowed}
+.op span{font-size:12px;color:var(--mu);white-space:nowrap}
+.go{font:800 15px Rubik,sans-serif;text-transform:uppercase;letter-spacing:.04em;background:var(--ac);color:#fff;border:2px solid var(--bd);padding:13px 26px;margin-top:16px;cursor:pointer;box-shadow:4px 4px 0 var(--bd)}
+.go:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--bd)}
+.msg{border-left:6px solid var(--ac);background:var(--card);padding:10px 14px;margin-bottom:14px;font-size:14px}
+.msg i{font-style:normal;font-weight:500;margin-right:8px;white-space:nowrap}
+.up{color:var(--up)}.dnc{color:var(--dn)}
+.rl{margin:10px 0 0;padding:0;list-style:none;font-size:14px}.rl li{padding:7px 0;border-top:2px solid var(--bd)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const MT=[["E","Энергия"],["M","Настроение"],["R","Отношения"],["P","Результат"]],DN=["Пн","Вт","Ср","Чт","Пт"];
+const EV=[
+{t:"В пятницу вечером начальник просит срочно переделать отчёт.",o:[["Сделать молча",[-12,-8,0,8]],["Назвать границы и предложить срок на понедельник",[-2,4,0,2]],["Отказаться",[0,2,-4,-6]]]},
+{t:"Коллега на планёрке выдал вашу идею за свою.",o:[["Промолчать",[0,-10,0,0]],["Спокойно уточнить после встречи",[-2,2,4,2]],["Возразить при всех",[-6,-4,-8,0]]]},
+{t:"Близкий говорит, что чувствует, будто вас нет рядом.",o:[["Отложить разговор",[0,-4,-10,3]],["Выслушать прямо сейчас",[-6,2,12,-3]],["Договориться об отдельном вечере",[-2,0,6,0]]]},
+{t:"Вы просыпаетесь с тревогой без видимой причины.",o:[["Игнорировать и работать",[-6,-8,0,4]],["Назвать чувство и сделать дыхательную практику",[3,6,0,-2]],["Написать другу",[-2,4,6,0]]]},
+{t:"Клиент сдвинул дедлайн на два дня раньше.",o:[["Сделать всё ночью",[-16,-8,-4,14]],["Перераспределить задачи в команде",[-4,0,-2,8]],["Попросить о переносе",[0,2,-2,-2]]]},
+{t:"Клиент прислал резкую критику, частично несправедливую.",o:[["Ответить резко",[-4,-6,-6,-4]],["Выдержать паузу и ответить по сути",[-3,2,0,6]],["Принять всё на свой счёт",[-8,-12,0,2]]]},
+{t:"Друг зовёт на вечер, но дел невпроворот.",o:[["Пойти",[-6,8,10,-6]],["Отказаться",[2,-6,-6,4]],["Пойти ненадолго",[-3,4,5,-1]]]},
+{t:"Вы нашли свою ошибку в расчётах.",o:[["Скрыть",[0,-8,0,2]],["Признать и исправить",[-4,2,3,4]],["Сослаться на обстоятельства",[0,-4,-6,0]]]}];
+const AC=[
+{n:"Проект до ночи",c:2,f:[-16,-6,-4,18]},
+{n:"Рабочая задача",c:1,f:[-10,-3,0,10]},
+{n:"Сон и отдых",c:1,f:[14,2,0,0]},
+{n:"Прогулка или спорт",c:1,f:[5,8,0,0]},
+{n:"Время с близкими",c:1,f:[-3,4,10,0]},
+{n:"Разбор эмоций в дневнике",c:1,f:[0,5,0,0],sh:1}];
+const $=id=>document.getElementById(id),app=$("app"),cl=v=>Math.max(0,Math.min(100,Math.round(v)));
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let s,day,evs,ph,slots,shield,msg;
+function ap(f,ev){let d=f.slice();
+ if(ev){d=d.map(v=>v<0&&s.E<25?v*1.5:v);if(shield)d=d.map(v=>v<0?v*.5:v)}
+ if(s.M<30&&d[2]>0)d[2]/=2;
+ const o={...s};MT.forEach(([k],i)=>s[k]=cl(s[k]+d[i]));return MT.map(([k])=>s[k]-o[k])}
+const chips=d=>d.map((v,i)=>v?`<i class="${v>0?"up":"dnc"}">${MT[i][1]} ${v>0?"+":""}${v}</i>`:"").join("");
+const bars=()=>`<div class="ds">${DN.map((d,i)=>`<span class="${i<day?"dn":i==day?"on":""}">${d}</span>`).join("")}</div><div class="ms">${MT.map(([k,n])=>`<div class="m${s[k]<25?" lo":""}"><span>${n}</span><b>${s[k]}</b><div class="bar"><i style="width:${s[k]}%"></i></div></div>`).join("")}</div>${msg?`<div class="msg">${msg}</div>`:""}`;
+function intro(){app.innerHTML=`<small>Стратегия · 5 дней</small><h1>Неделя<br>на <em>пределе</em></h1><p>Вам нужно пройти рабочую неделю и не сгореть. Каждый день случается событие, а вечером у вас есть три свободных слота.</p><div class="card"><b>Правила</b><ul class="rl"><li>Нужны высокий Результат и приличные Энергия, Настроение и Отношения одновременно.</li><li>Каждый день Энергия падает на 8, Отношения на 5, Настроение на 2.</li><li>Когда Энергия ниже 25, неприятности бьют сильнее на 50%, а работа приносит вдвое меньше.</li><li>Когда Настроение ниже 30, общение даёт вдвое меньше.</li><li>Разбор эмоций в дневнике смягчает следующее событие. Неиспользованные слоты ночью восстанавливают Энергию.</li></ul></div><button class="go" onclick="start()">Начать неделю</button>`}
+function start(){s={E:60,M:60,R:55,P:10};day=0;evs=sh(EV).slice(0,5);ph="ev";shield=false;msg="";draw()}
+function draw(){
+ if(ph=="ev"){const e=evs[day];app.innerHTML=bars()+`<div class="card"><small>${DN[day]} · событие</small><h2>${e.t}</h2>${e.o.map((o,k)=>`<button class="op" onclick="pickEv(${k})">${o[0]}</button>`).join("")}</div>`}
+ else app.innerHTML=bars()+`<div class="card"><small>${DN[day]} · вечер, слотов: ${slots} из 3</small><h2>Как проведёте вечер?</h2>${AC.map((a,k)=>`<button class="op" ${a.c>slots?"disabled":""} onclick="act(${k})">${a.n}<span>${a.c} сл.</span></button>`).join("")}<button class="go" onclick="endDay()">${slots?"Лечь спать":"Завершить день"}</button></div>`}
+function pickEv(k){const o=evs[day].o[k],d=ap(o[1],true);msg=`<b>${o[0]}</b><br>${chips(d)}${shield?" Дневник смягчил удар.":""}`;shield=false;ph="eve";slots=3;draw()}
+function act(k){const a=AC[k],f=a.f.slice();if(s.E<25&&f[3]>0)f[3]=Math.round(f[3]/2);slots-=a.c;const d=ap(f,false);if(a.sh)shield=true;msg=`<b>${a.n}</b><br>${chips(d)}${a.sh?" Следующее событие будет мягче.":""}`;draw()}
+function endDay(){const d=ap([-8+slots*3,-2,-5,0],false);msg=`<b>Ночь</b><br>${chips(d)}`;day++;if(day>=5)return end();ph="ev";draw()}
+function end(){const mn=Math.min(s.E,s.M,s.R);let h,t;
+ if(s.P>=60&&mn>=35){h="Баланс удержан";t="Вы справились с задачами и сохранили ресурсы. Это редкий результат, потому что обычно одним приходится жертвовать ради другого."}
+ else if(s.P>=40&&mn>=25){h="Выдержали на пределе";t="Неделя пройдена, но запас прочности почти исчерпан. Ещё одна такая неделя может закончиться выгоранием."}
+ else if(mn<25){h="Выгорание рядом";t="Один из ресурсов упал слишком низко. Это сигнал остановиться, а не продолжать на силе воли."}
+ else{h="Безопасно, но без результата";t="Ресурсы целы, а рабочий результат невысок. Возможно, вы слишком осторожничали с нагрузкой."}
+ const w=MT.filter(([k])=>k!="P").sort((a,b)=>s[a[0]]-s[b[0]])[0];
+ const tip={E:"Закладывайте восстановление заранее, а не после падения.",M:"Короткая прогулка и дневник эмоций дают настроению больше, чем кажется.",R:"Отношения тихо остывают. Небольшие регулярные вечера важнее редких больших."}[w[0]];
+ app.innerHTML=`<small>Итог недели</small><h1>${h}</h1><p>${t}</p>${bars().replace(/<div class="ds">.*?<\/div><div class="ms">/,'<div class="ms">')}<div class="card"><b>Слабое место: ${w[1].toLowerCase()}</b><p class="mu">${tip}</p></div><button class="go" onclick="start()">Сыграть ещё раз</button>`;scrollTo(0,0)}
+intro();
+</script>
+</body>
+</html>
